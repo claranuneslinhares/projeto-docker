@@ -1,0 +1,39 @@
+{% include 'header.html' %}
+
+<div class="row">
+<div class="col-4"></div>
+<div class="col-4">
+<div class="card">
+    <div class="card-header">Editar tarefa</div>
+    <div class="card-body">
+        <form action="/tarefas/edit/atualizar" method="post">
+            <input type="hidden" name="txtid" value="{{tarefas['id']}}">
+            <div class="mb-3">
+            <label for="" class="form-label">Nome</label>
+            <input type="text" class="form-control" name="nome" id="nome" aria-describedby="helpId" placeholder="Nome" value="{{tarefas['nome']}}"/>
+        </div>
+        <div class="mb-3">
+            <label for="data" class="form-label">Data</label>
+            <input type="date" class="form-control" name="data" id="data" value="{{tarefas['data']}}" />
+        </div>
+        <div class="mb-3">
+         <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status" name="status">
+            <option value="Pendente" {% if tarefas['status'] == "Pendente" %}selected{% endif %}>Pendente</option>
+            <option value="Em andamento" {% if tarefas['status'] == "Em andamento" %}selected{% endif %}>Em andamento</option>
+            <option value="Concluída" {% if tarefas['status'] == "Concluída" %}selected{% endif %}>Concluída</option>
+        </select>
+
+        </div>
+<button type="submit" class="btn btn-primary">Atualizar</button>
+        </form>
+    </div>
+
+    </div>
+</div>
+</div>
+<div class="col-4"></div>
+</div>
+    
+
+{% include 'footer.html' %}
