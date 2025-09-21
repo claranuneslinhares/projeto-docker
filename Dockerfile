@@ -2,7 +2,7 @@ FROM python:3.10
 
 WORKDIR /app
 
-COPY wait-for-it.sh ..
+COPY . .
 
  
 RUN chmod +x wait-for-it.sh && \
