@@ -24,8 +24,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
       - MYSQL_DB=dbcrud
-    volumes:
-    - .:/app
+    
 volumes:
   mysql_data:
 
