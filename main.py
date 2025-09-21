@@ -11,24 +11,41 @@ app=Flask(__name__)
 mysql=MySQL()
 
 
-app.config['MYSQL_HOST']= os.environ.get('MYSQL_HOST','localhost')
-app.config['MYSQL_PORT']=int(os.environ.get('MYSQL_PORT',3306))
-app.config['MYSQL_USER']=os.environ.get('MYSQL_USER', 'root')
-app.config['MYSQL_PASSWORD']=os.environ.get('MYSQL_PASSWORD', '')
-app.config['MYSQL_DB']=os.environ.get('MYSQL_DB', 'dbcrud')
-app.config['MYSQL_CURSORCLASS']='DictCursor'
+MYSQL_HOST = os.environ.get('MYSQL_HOST', 'db')
+MYSQL_PORT = int(os.environ.get('MYSQL_PORT', 3306))
+MYSQL_USER = os.environ.get('MYSQL_USER', 'root')
+MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', 'root')
+MYSQL_DB = os.environ.get('MYSQL_DB', 'dbcrud')
 
-MAX_RETRIES = 5
+
+app.config['MYSQL_HOST'] = MYSQL_HOST
+app.config['MYSQL_PORT'] = MYSQL_PORT
+app.config['MYSQL_USER'] = MYSQL_USER
+app.config['MYSQL_PASSWORD'] = MYSQL_PASSWORD
+app.config['MYSQL_DB'] = MYSQL_DB
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+
+MAX_RETRIES = 10
 for i in range(MAX_RETRIES):
     try:
-        mysql.init_app(app)
-        db = mysql.connection
+        conn = MySQLdb.connect(
+            host=MYSQL_HOST,
+            port=MYSQL_PORT,
+            user=MYSQL_USER,
+            passwd=MYSQL_PASSWORD,
+            db=MYSQL_DB
+        )
+        conn.close()
+        print("MySQL pronto!")
         break
-    except MySQLdb.OperationalError:
-        print(f"Tentativa {i+1} falhou, esperando 3s...")
+    except MySQLdb.OperationalError as e:
+        print(f"Tentativa {i+1} falhou, esperando 3s... ({e})")
         time.sleep(3)
 else:
     raise Exception("Não conseguiu conectar ao MySQL")
+
+mysql.init_app(app)
 
 @app.route('/')
 def index():
