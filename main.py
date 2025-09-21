@@ -17,7 +17,18 @@ app.config['MYSQL_USER']=os.environ.get('MYSQL_USER', 'root')
 app.config['MYSQL_PASSWORD']=os.environ.get('MYSQL_PASSWORD', '')
 app.config['MYSQL_DB']=os.environ.get('MYSQL_DB', 'dbcrud')
 app.config['MYSQL_CURSORCLASS']='DictCursor'
-mysql.init_app(app)
+
+MAX_RETRIES = 5
+for i in range(MAX_RETRIES):
+    try:
+        mysql.init_app(app)
+        db = mysql.connection
+        break
+    except MySQLdb.OperationalError:
+        print(f"Tentativa {i+1} falhou, esperando 3s...")
+        time.sleep(3)
+else:
+    raise Exception("Não conseguiu conectar ao MySQL")
 
 @app.route('/')
 def index():
@@ -92,14 +103,3 @@ if __name__=="__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
 
 
-MAX_RETRIES = 5
-for i in range(MAX_RETRIES):
-    try:
-        mysql.init_app(app)
-        db = mysql.connection
-        break
-    except MySQLdb.OperationalError:
-        print(f"Tentativa {i+1} falhou, esperando 3s...")
-        time.sleep(3)
-else:
-    raise Exception("Não conseguiu conectar ao MySQL")
