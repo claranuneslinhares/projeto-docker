@@ -9,4 +9,4 @@ RUN apt-get update && \
     pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
-CMD ["python", "main.py"]
+CMD [ "./wait-for-it.sh", "db:3306", "--","python", "main.py"]
