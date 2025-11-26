@@ -11,7 +11,7 @@ app=Flask(__name__)
 mysql=MySQL()
 
 
-MYSQL_HOST = os.environ.get('MYSQL_HOST', 'db')
+MYSQL_HOST = os.environ.get('MYSQL_HOST', 'docker-project-web_db')
 MYSQL_PORT = int(os.environ.get('MYSQL_PORT', 3306))
 MYSQL_USER = os.environ.get('MYSQL_USER', 'root')
 MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', 'root')
@@ -26,7 +26,7 @@ app.config['MYSQL_DB'] = MYSQL_DB
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 
-MAX_RETRIES = 10
+MAX_RETRIES = 20
 for i in range(MAX_RETRIES):
     try:
         conn = MySQLdb.connect(
@@ -117,6 +117,6 @@ def  tarefas_atualizar():
 
 
 if __name__=="__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
 
 
